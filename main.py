@@ -2,10 +2,11 @@ import math
 
 
 class ItemToPurchase:
-    def __init__(self, item_name="none", item_price=0.0, quantity=0):
+    def __init__(self, item_name="none", item_price=0.0, quantity=0, item_description="none"):
         self.item_name = item_name
         self.item_price = item_price
         self.item_quantity = quantity
+        self.item_description = item_description
 
     def print_item_cost(self):
         print(self.item_name, self.item_quantity,
@@ -46,8 +47,10 @@ class ShoppingCart:
             self.cart_items[i].item_price = item.item_price
         if item.item_quantity != 0:
             self.cart_items[i].item_quantity = item.item_quantity
+        if item.item_description != "none":
+            self.cart_items[i].item_description = item.item_description
 
-    def get_num_items_in_cart(self):
+    def get_num_items(self):
         # Add the quantities of every item in the cart.
         num_item = 0
         for item in self.cart_items:
@@ -63,7 +66,7 @@ class ShoppingCart:
 
     def print_total(self):
         print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
-        print(f"Number of Items: {self.get_num_items_in_cart()}")
+        print(f"Number of Items: {self.get_num_items()}")
         print()
         if not self.cart_items:
             print("SHOPPING CART IS EMPTY")
@@ -79,7 +82,7 @@ class ShoppingCart:
             print("SHOPPING CART IS EMPTY")
         else:
             for item in self.cart_items:
-                item.print_item_cost()
+                print(f"{item.item_name}: {item.item_description}")
 
 
 def get_quantity():
@@ -98,7 +101,7 @@ def print_menu(cart):
         print("a - Add item to cart")
         print("r - Remove item from cart")
         print("c - Change item quantity")
-        print("i - Output cart description")
+        print("i - Output items' descriptions")
         print("o - Output shopping cart")
         print("q - Quit")
 
@@ -111,6 +114,7 @@ def print_menu(cart):
             break
         elif choice == "a":
             name = input("Enter the item name: ").strip()
+            description = input("Enter the item description: ").strip()
             # Check the price text before converting it to a number.
             while True:
                 price_input = input("Enter the item price: ").strip()
@@ -120,7 +124,7 @@ def print_menu(cart):
                         break
                 print("Invalid price. Enter a nonnegative number.")
             quantity = get_quantity()
-            cart.add_item(ItemToPurchase(name, price, quantity))
+            cart.add_item(ItemToPurchase(name, price, quantity, description))
         elif choice == "r":
             name = input("Enter name of item to remove: ").strip()
             cart.remove_item(name)
